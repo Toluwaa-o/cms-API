@@ -1,0 +1,391 @@
+{
+	"info": {
+		"_postman_id": "fd8d9013-d75b-49ba-b417-496d2f0451cc",
+		"name": "CMS API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26898944"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json()\r",
+									"pm.globals.set(\"cmsToken\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test1@test.com\",\r\n    \"password\": \"secret12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/auth/login",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign Up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json()\r",
+									"pm.globals.set(\"cmsToken\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Stanley\",\r\n    \"lastName\": \"Samuel\",\r\n    \"address\": \"isawo\",\r\n    \"email\": \"stanley@test.com\",\r\n    \"contact\": \"123457899\",\r\n    \"password\": \"secret12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/auth/signup",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/auth/logout",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Civilians",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/users/users",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"users",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Officers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/users/officers",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"users",
+								"officers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Unverified Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/users/officers/unverified",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"users",
+								"officers",
+								"unverified"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/users/646424459d8c834f4fbec37b",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"users",
+								"646424459d8c834f4fbec37b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Bradley\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/users/646424459d8c834f4fbec37b",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"users",
+								"646424459d8c834f4fbec37b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/users/646424459d8c834f4fbec37b",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"users",
+								"646424459d8c834f4fbec37b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Get All Reports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Report",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"i witnessed a hit and run\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports/6442c798ebdda72ab340e9f7",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"reports",
+								"6442c798ebdda72ab340e9f7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Report",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports/6442c798ebdda72ab340e9f7",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"reports",
+								"6442c798ebdda72ab340e9f7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"I witnessed a robbery\",\r\n    \"category\": \"Crime against person(s)\",\r\n    \"description\": \"lacinia eget tincidunt eget tempus vel pede morbi porttitor lorem id ligula suspendisse ornare consequat lectus in est risus auctor sed tristique in tempus sit amet sem fusce consequat nulla nisl nunc nisl duis bibendum felis sed interdum venenatis turpis enim blandit mi in porttitor pede justo eu massa donec dapibus duis at velit eu est congue elementum in hac habitasse platea dictumst morbi vestibulum velit id pretium iaculis diam erat fermentum justo nec condimentum neque sapien placerat\",\r\n    \"location\": \"No 1, timothy road. Dansoma\",\r\n    \"media\": [\"https://res.cloudinary.com/dggxyq3pt/image/upload/v1684288455/file%20uploads/tmp-1-1684288353224_yszf6u.jpg\", \"https://res.cloudinary.com/dggxyq3pt/image/upload/v1684288455/file%20uploads/tmp-1-1684288353224_yszf6u.jpg\", \"https://res.cloudinary.com/dggxyq3pt/image/upload/v1684288455/file%20uploads/tmp-1-1684288353224_yszf6u.jpg\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Upload File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "media",
+									"type": "file",
+									"src": "/C:/Users/PC/Downloads/be2.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports/upload-file",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"reports",
+								"upload-file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Report Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports/stats",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"reports",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports/6442c798ebdda72ab340e9f7",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"reports",
+								"6442c798ebdda72ab340e9f7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
