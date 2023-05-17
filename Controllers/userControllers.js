@@ -78,4 +78,10 @@ const deleteUser = async (req, res) => {
     res.status(200).json({ msg: 'User succcessfully deleted'})
 }
 
-module.exports = { editUser, getUser, getAllCivillians, getAllOfficers, getAllUnverified, deleteUser }
+const showCurrentUser = async (req, res) => {
+    if(!req.user) throw new CustomErrors.UnauthenticatedError('User unauthorized to access this route')
+
+    res.status(200).json({ user: { userId: req.user.userId, userType: req.user.userType }})
+}
+
+module.exports = { editUser, getUser, getAllCivillians, getAllOfficers, getAllUnverified, deleteUser, showCurrentUser }
