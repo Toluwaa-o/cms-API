@@ -1,5 +1,9 @@
 const mongoose = require('mongoose')
 
+const ResponseSchema = new mongoose.Schema({
+    description: { type: String }
+}, { timestamps: true })
+
 const ReportSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -18,8 +22,8 @@ const ReportSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Active', 'Responded'],
-        default: 'Pending'
+        enum: ['pending', 'active', 'responded'],
+        default: 'pending'
     },
     media: [{
         type: String
@@ -32,7 +36,9 @@ const ReportSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide a description'],
         minLength: 20
-    }
+    },
+    response: ResponseSchema
+
 }, { timestamps: true })
 
 module.exports = mongoose.model('Report', ReportSchema)

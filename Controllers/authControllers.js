@@ -18,7 +18,7 @@ const login = async (req, res) => {
 
     // const { firstName, lastName, userType, contact, address, email } = user
     // const token = user.generateToken()
-    await attachCookies({res, user: { userId: user._id, userType: user.userType }})
+    await attachCookies({res, user: { userId: user._id, userType: user.userType, verified: user.verified }})
     return res.status(200).json({ user })
 }
 
@@ -32,7 +32,7 @@ const signup = async (req, res) => {
     req.body.verified = req.body.userType === 'officer' ? false : true
 
     const user = await User.create(req.body)
-    await attachCookies({res, user: {userId: user._id, userType: user.userType}})
+    await attachCookies({res, user: {userId: user._id, userType: user.userType, verified: user.verified }})
 
     res.status(201).json({ user })
 }

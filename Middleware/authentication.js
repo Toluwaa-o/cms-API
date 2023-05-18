@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
 
     try {
         const isValid = await isTokenValid(token)
-        req.user = { userId: isValid.userId, userType: isValid.userType }
+        req.user = { userId: isValid.userId, userType: isValid.userType, verified: isValid.verified }
         
         next()
 

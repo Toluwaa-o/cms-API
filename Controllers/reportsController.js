@@ -1,6 +1,5 @@
 const Report = require('../Models/reportModel')
 const CustomErrors = require('../Errors')
-const mongoose = require('mongoose')
 const moment = require('moment')
 const cloudinary = require('cloudinary').v2
 const fs = require('fs')
@@ -12,6 +11,8 @@ const getAllReports = async (req, res) => {
     let report
     let result
     let queryObject = {}
+
+    if(!req.user.verified) throw new CustomErrors.UnauthenticatedError('User is not verified yet!')
 
     if(req.user.userType === 'civilian'){
         queryObject = {
@@ -127,6 +128,7 @@ const createReport = async (req, res) => {
     }
 
     req.body.createdBy = req.user.userId
+    req.body.status = 'pending'
 
     const report = await Report.create(req.body)
 
@@ -154,13 +156,24 @@ const deleteReport = async ( req, res ) => {
 }
 
 const updateReport = async (req, res) => {
+    const { response, status } = req.body
+
     const report = await Report.findOne({_id: req.params.id})
 
     if(!report){
         throw new CustomErrors.NotFoundError(`No report was found with that ${req.params.id}`)
     }
 
+    if(status === 'active' && !response) throw new CustomErrors.BadRequestError('Please provide a the response information')
+
     checkPermissions(req.user, report.createdBy)
+
+    if(report.status === 'responded') throw new CustomErrors.Forbidden('Report has already been attended to!')
+
+    if(response) {
+        report.status = 'active'
+        report.response = response
+    }
 
     await report.updateOne(req.body, { new: true, runValidators: true})
 
@@ -168,6 +181,8 @@ const updateReport = async (req, res) => {
 }
 
 const getReport = async (req, res) => {
+
+    if(!req.user.verified) throw new CustomErrors.UnauthenticatedError('User is not verified yet!')
     const report = await Report.findOne({_id: req.params.id})
 
     if(!report) {
@@ -219,6 +234,8 @@ const getStats = async (req, res) => {
     //     return res.status(200).json({ defaultStats, monthlyApplications })
     // }
 
+    if(!req.user.verified) throw new CustomErrors.UnauthenticatedError('User is not verified yet!')
+    
     let stats = await Report.aggregate([
         {$match: {}},
         {$group: {_id: '$status', count: {$sum: 1}} }
