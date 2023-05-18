@@ -121,6 +121,7 @@ const getAllReports = async (req, res) => {
 }
 
 const createReport = async (req, res) => {
+    if(req.user.userType === 'officer') throw new CustomErrors.UnauthenticatedError(`Police officers cannot create a report`);
     const { location, description, category } = req.body
 
     if( !location || !description || !category ) {
