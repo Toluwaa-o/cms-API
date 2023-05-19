@@ -212,7 +212,7 @@ const getReport = async (req, res) => {
         throw new CustomErrors.NotFoundError('No reports found')
     }
 
-    checkPermissions(req.user, report.createdBy)
+    if(req.user.userType === 'civilian') checkPermissions(req.user, report.createdBy)
 
     // const { title, category, status, media, location, description, _id } = report
     return res.status(200).json({ report })
