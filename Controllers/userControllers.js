@@ -23,7 +23,7 @@ const getAllOfficers = async (req, res) => {
     const skip = (page - 1) * limit
 
     let queryObject = {userType: 'officer', verified: true}
-    if(firstName) queryObject.firstName = { $regex: search, $options: 'i' }
+    if(search) queryObject.firstName = { $regex: search, $options: 'i' }
 
     const users = await User.find(queryObject).select('-password').skip(skip).limit(limit)
 
