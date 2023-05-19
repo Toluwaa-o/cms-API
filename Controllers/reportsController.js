@@ -78,7 +78,7 @@ const getAllReports = async (req, res) => {
         queryObject.category = category
     }
 
-    if(status){
+    if(status && status !== 'all'){
         queryObject.status = status
     }
 
