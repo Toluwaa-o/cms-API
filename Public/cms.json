@@ -382,7 +382,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports/6442c798ebdda72ab340e9f7/update",
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/reports/6442c798ebdda72ab340e9f7/response",
 							"host": [
 								"https://cms-api-cd7r.onrender.com"
 							],
