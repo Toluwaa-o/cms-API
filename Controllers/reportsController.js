@@ -194,7 +194,11 @@ const updateReponse = async (req, res) => {
         req.body.response = response
     }
 
-    await report.updateOne({ response , status: req.body.status }, { new: true, runValidators: true})
+    if(report.response){
+        req.body.response = report.response
+    }
+
+    await report.updateOne({ response: req.body.response , status: req.body.status }, { new: true, runValidators: true})
 
     return res.status(200).json({ report })
 }
