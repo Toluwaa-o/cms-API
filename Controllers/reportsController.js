@@ -74,7 +74,7 @@ const getAllReports = async (req, res) => {
         queryObject.title = { $regex: search, $options: 'i' }
     }
 
-    if(category){
+    if(category && category !== 'all'){
         queryObject.category = category
     }
 
