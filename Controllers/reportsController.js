@@ -157,6 +157,24 @@ const deleteReport = async ( req, res ) => {
 }
 
 const updateReport = async (req, res) => {
+    const { title, location, category, description, media } = req.body
+
+    const report = await Report.findOne({_id: req.params.id})
+
+    if(!report){
+        throw new CustomErrors.NotFoundError(`No report was found with that ${req.params.id}`)
+    }
+
+    checkPermissions(req.user, report.createdBy)
+
+    if(report.status === 'responded') throw new CustomErrors.Forbidden('Report has already been attended to!')
+
+    await report.updateOne({ title, location, category, description, media }, { new: true, runValidators: true})
+
+    return res.status(200).json({ report })
+}
+
+const updateReponse = async (req, res) => {
     const { response, status } = req.body
 
     const report = await Report.findOne({_id: req.params.id})
@@ -176,7 +194,7 @@ const updateReport = async (req, res) => {
         req.body.response = response
     }
 
-    await report.updateOne(req.body, { new: true, runValidators: true})
+    await report.updateOne({ response , status: req.body.status }, { new: true, runValidators: true})
 
     return res.status(200).json({ report })
 }
@@ -309,4 +327,4 @@ const uploadFile = async (req, res) => {
     }
 }
 
-module.exports = { getAllReports, deleteReport, updateReport, getReport, getStats, createReport, uploadFile }
+module.exports = { getAllReports, deleteReport, updateReport, getReport, getStats, createReport, uploadFile, updateReponse }
