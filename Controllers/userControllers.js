@@ -20,11 +20,11 @@ const getAllOfficers = async (req, res) => {
     const limit = 10
     const skip = (page - 1) * limit
 
-    const users = await User.find({userType: 'officers', verified: true}).select('-password').skip(skip).limit(limit)
+    const users = await User.find({userType: 'officer', verified: true}).select('-password').skip(skip).limit(limit)
 
     if(!users || users.length < 1) throw new CustomErrors.NotFoundError('No users found')
 
-    const totalUsers = await User.countDocuments({userType: 'officers', verified: true})
+    const totalUsers = await User.countDocuments({userType: 'officer', verified: true})
     const numOfPages = Math.ceil(totalUsers/limit)
     res.status(200).json({ users, totalUsers, numOfPages })
 }
@@ -34,11 +34,11 @@ const getAllUnverified = async (req, res) => {
     const limit = 10
     const skip = (page - 1) * limit
 
-    const users = await User.find({userType: 'officers', verified: false}).select('-password').skip(skip).limit(limit)
+    const users = await User.find({userType: 'officer', verified: false}).select('-password').skip(skip).limit(limit)
 
     if(!users || users.length < 1) throw new CustomErrors.NotFoundError('No users found')
 
-    const totalUsers = await User.countDocuments({userType: 'officers', verified: false})
+    const totalUsers = await User.countDocuments({userType: 'officer', verified: false})
     const numOfPages = Math.ceil(totalUsers/limit)
     res.status(200).json({ users, totalUsers, numOfPages })
 }
