@@ -172,8 +172,8 @@ const updateReport = async (req, res) => {
     if(report.status === 'responded') throw new CustomErrors.Forbidden('Report has already been attended to!')
 
     if(response) {
-        report.status = 'active'
-        report.response = response
+        req.body.status = 'active'
+        req.body.response = response
     }
 
     await report.updateOne(req.body, { new: true, runValidators: true})
