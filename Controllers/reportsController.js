@@ -192,8 +192,8 @@ const getReport = async (req, res) => {
 
     checkPermissions(req.user, report.createdBy)
 
-    const { title, category, status, media, location, description, _id } = report
-    return res.status(200).json({ title, category, status, media, location, description, _id })
+    // const { title, category, status, media, location, description, _id } = report
+    return res.status(200).json({ report })
 }
 
 const getStats = async (req, res) => {
