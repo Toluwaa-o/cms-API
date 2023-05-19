@@ -1,9 +1,5 @@
 const mongoose = require('mongoose')
 
-const ResponseSchema = new mongoose.Schema({
-    description: { type: String }
-}, { timestamps: true })
-
 const ReportSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -37,7 +33,7 @@ const ReportSchema = new mongoose.Schema({
         required: [true, 'Please provide a description'],
         minLength: 20
     },
-    response: ResponseSchema
+    response: { type: String }
 
 }, { timestamps: true })
 
