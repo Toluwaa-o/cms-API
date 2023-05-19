@@ -45,7 +45,7 @@ const getAllUnverified = async (req, res) => {
 
 const editUser = async (req, res) => {
     const { id: userId } = req.params
-    const user = await User.findOne({_id: req.user.userId})
+    const user = await User.findOne({_id: userId})
 
     if(!user) throw new CustomErrors.NotFoundError(`No user found with id ${userId}`)
 
