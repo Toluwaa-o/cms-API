@@ -276,21 +276,37 @@ const getStats = async (req, res) => {
 
 const uploadFile = async (req, res) => {
     
-    const media = req.files.media
-    console.log(media.mimetype)
+    const {image, video} = req.files
 
-    if(!media.mimetype.startsWith('image') && !media.mimetype.startsWith('video')) {
-        throw new CustomErrors.BadRequestError('Please upload a video or an image')
+    if(image) {
+        if(!image.mimetype.startsWith('image')) {
+            throw new CustomErrors.BadRequestError('Please upload a video or an image')
+        }
+    
+        const result = await cloudinary.uploader.upload(image.tempFilePath, {
+            use_filename: true,
+            folder: 'file uploads'
+        })
+    
+        fs.unlinkSync(image.tempFilePath)
+    
+        return res.status(200).json({ src: result.secure_url })
     }
 
-    const result = await cloudinary.uploader.upload(media.tempFilePath, {
-        use_filename: true,
-        folder: 'file uploads'
-    })
-
-    fs.unlinkSync(media.tempFilePath)
-
-    res.status(200).json({ src: result.secure_url })
+    if(video) {
+        if(!video.mimetype.startsWith('image')) {
+            throw new CustomErrors.BadRequestError('Please upload a video or an image')
+        }
+    
+        const result = await cloudinary.uploader.upload(video.tempFilePath, {
+            use_filename: true,
+            folder: 'file uploads'
+        })
+    
+        fs.unlinkSync(video.tempFilePath)
+    
+        return res.status(200).json({ src: result.secure_url })
+    }
 }
 
 module.exports = { getAllReports, deleteReport, updateReport, getReport, getStats, createReport, uploadFile }
