@@ -16,11 +16,16 @@ const getAllCivillians = async (req, res) => {
 }
 
 const getAllOfficers = async (req, res) => {
+    const { firstName } = req.query
+
     const page = Number(req.query.page) || 1
     const limit = 10
     const skip = (page - 1) * limit
 
-    const users = await User.find({userType: 'officer', verified: true}).select('-password').skip(skip).limit(limit)
+    let queryObject = {userType: 'officer', verified: true}
+    if(firstName) queryObject.firstName = { $regex: firstName, $options: 'i' }
+
+    const users = await User.find(queryObject).select('-password').skip(skip).limit(limit)
 
     if(!users || users.length < 1) throw new CustomErrors.NotFoundError('No users found')
 
