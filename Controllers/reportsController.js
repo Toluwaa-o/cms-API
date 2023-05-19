@@ -184,7 +184,7 @@ const updateReport = async (req, res) => {
 const getReport = async (req, res) => {
 
     if(!req.user.verified) throw new CustomErrors.UnauthenticatedError('User is not verified yet!')
-    const report = await Report.findOne({_id: req.params.id})
+    const report = await Report.findOne({_id: req.params.id}).populate({path: 'createdBy', select: 'firstName lastName'})
 
     if(!report) {
         throw new CustomErrors.NotFoundError('No reports found')
