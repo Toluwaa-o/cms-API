@@ -50,7 +50,7 @@ const logout = async (req, res) => {
 }
 
 const forgottenPassword = async (req, res) => {
-    const [ email, oldPassword, newPassword ] = req.body
+    const { email, oldPassword, newPassword } = req.body
 
     const user = await User.findOne({email})
 
