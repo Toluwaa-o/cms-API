@@ -49,4 +49,17 @@ const logout = async (req, res) => {
     res.status(200).json({ msg: 'Logged out '})
 }
 
-module.exports = { login, signup, logout }
+const forgottenPassword = async (req, res) => {
+    const [ email, oldPassword, newPassword ] = req.body
+
+    const user = await User.findOne({email})
+
+    const isCorrectPassword = await user.comparePassword(oldPassword)
+
+    if(!isCorrectPassword) throw new CustomError.UnauthenticatedError('Incorrect password')
+
+    await user.updateOne({password: newPassword}, { new: true, runValidator: true })
+    res.status(200).json({ msg: 'Password updated successfully!'})
+}
+
+module.exports = { login, signup, logout, forgottenPassword }

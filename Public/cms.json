@@ -104,6 +104,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Forgotten Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test1@test.com\",\r\n    \"oldPassword\": \"secret12\",\r\n    \"newPassword\": \"secret13\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cms-api-cd7r.onrender.com/cms-api/auth/forgotten-password",
+							"host": [
+								"https://cms-api-cd7r.onrender.com"
+							],
+							"path": [
+								"auth",
+								"forgotten-password"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

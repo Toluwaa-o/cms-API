@@ -8408,6 +8408,8 @@
                             <li><a class=endpoint_menu href=#jump-Authentication-Login>Login</a>
                             <li><a class=endpoint_menu href=#jump-Authentication-SignUp>Sign Up</a>
                             <li><a class=endpoint_menu href=#jump-Authentication-Logout>Logout</a>
+                            <li><a class=endpoint_menu href=#jump-Authentication-ForgottenPassword>Forgotten
+                                    Password</a>
                         </ul>
                     <li><strong><a href=#User>User</a></strong>
                         <ul>
@@ -8437,7 +8439,7 @@
                 <div class="panel panel-default">
                     <div class=panel-heading>
                         <h3 class=panel-title id=Authentication>Authentication
-                            <span class=badge>3</span>
+                            <span class=badge>4</span>
                         </h3>
                     </div>
                     <div class=panel-body>
@@ -8508,6 +8510,30 @@
                                         </a></div>
                                     <div id=collapse-Authentication-Logout class="panel-collapse collapse">
                                         <div class=panel-body></div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-warning" id=jump-Authentication-ForgottenPassword>
+                                    <div class=panel-heading><small class="pull-right text-muted">raw</small>
+                                        <a class=text-warning data-toggle=collapse data-parent=#accordion-Authentication
+                                            href=#collapse-Authentication-ForgottenPassword>
+                                            <h4 class=panel-title><span
+                                                    class="glyphicon glyphicon-plus"></span><strong>Forgotten
+                                                    Password</strong> &nbsp;|&nbsp;
+                                                <strong class="request-method border-warning">PATCH</strong>
+                                                &nbsp;
+                                                https://cms-api-cd7r.onrender.com/cms-api/auth/forgotten-password
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div id=collapse-Authentication-ForgottenPassword class="panel-collapse collapse">
+                                        <div class=panel-body>
+                                            <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+                                                &#34;email&#34;: &#34;test1@test.com&#34;,
+                                                &#34;oldPassword&#34;: &#34;secret12&#34;,
+                                                &#34;newPassword&#34;: &#34;secret13&#34;
+                                                }</span>
+                                            <div class=clearfix></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -8842,13 +8868,13 @@
             </div>
         </div>
     </div>
-   <br><br>
-   <script src="./browser.js"></script>
+    <br><br>
+    <script src="./browser.js"></script>
     <footer class="navbar-default navbar-fixed-bottom">
         <div class=container-fluid>
             <div class="span12 text-center"><span data-toggle=tooltip
                     title="If the application help you, please feel free to give a star to the project in github. Your star inspire me to work more on open-source projects like this!">Generated
-                    at 2023-05-19 22:30:54 by <a href=https://github.com/thedevsaddam/docgen target=_blank
+                    at 2023-05-20 00:24:11 by <a href=https://github.com/thedevsaddam/docgen target=_blank
                         class=text-muted>docgen</a></span></div>
         </div>
     </footer>
