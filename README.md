@@ -10,6 +10,7 @@ Functionalities:
 * Validation for user inputs with controllers & validator
 * Sending and receiving JWT Tokens in cookies with cookie-parser
 * CORS, Helmet, XSS-Clean & Mongo-Sanitize for security
+* and many more.....
 
 Links:
 
