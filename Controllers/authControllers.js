@@ -56,7 +56,7 @@ const forgottenPassword = async (req, res) => {
 
     if(!user) throw new CustomError.UnauthenticatedError('Invalid login credentials')
 
-    const isCorrectPassword = await user.comparePassword(oldPassword)
+    const isCorrectPassword = await user.comparePasswords(oldPassword)
 
     if(!isCorrectPassword) throw new CustomError.UnauthenticatedError('Incorrect password')
 
