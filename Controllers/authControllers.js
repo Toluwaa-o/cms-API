@@ -59,7 +59,7 @@ const forgottenPassword = async (req, res) => {
     if(!isCorrectPassword) throw new CustomError.UnauthenticatedError('Incorrect password')
 
     await user.updateOne({password: newPassword}, { new: true, runValidator: true })
-    res.status(200).json({ msg: 'Password updated successfully!'})
+    res.status(200).json({ user })
 }
 
 module.exports = { login, signup, logout, forgottenPassword }
