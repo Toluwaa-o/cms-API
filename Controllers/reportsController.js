@@ -189,7 +189,7 @@ const updateReponse = async (req, res) => {
 
     if(report.status === 'responded') throw new CustomErrors.Forbidden('Report has already been attended to!')
 
-    if(response) {
+    if(response && !report.response) {
         req.body.status = 'active'
         req.body.response = response
     }
