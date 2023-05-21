@@ -271,9 +271,9 @@ const getStats = async (req, res) => {
     }, {})
 
     const defaultStats = {
-        pending: stats.Pending || 0,
-        active: stats.Active || 0,
-        responded: stats.Responded || 0
+        pending: stats.pending || 0,
+        active: stats.active || 0,
+        responded: stats.responded || 0
     }
 
     let monthlyApplications = await Report.aggregate([
