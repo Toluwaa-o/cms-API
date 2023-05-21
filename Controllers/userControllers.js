@@ -50,7 +50,7 @@ const getAllUnverified = async (req, res) => {
 
 const editUser = async (req, res) => {
     const { id: userId } = req.params
-    const user = await User.findOne({_id: userId})
+    const user = await User.findOne({_id: userId}).select('-password')
 
     if(!user) throw new CustomErrors.NotFoundError(`No user found with id ${userId}`)
 
@@ -63,10 +63,9 @@ const editUser = async (req, res) => {
 const getUser = async (req, res) => {
     const { id: userId } = req.params
 
-    const user = await User.findOne({_id: userId})
+    const user = await User.findOne({_id: userId}).select('-password')
 
     if(!user) throw new CustomErrors.NotFoundError(`No user found with id ${userId}`)
-    console.log(req.user, user._id)
     checkPermissions(req.user, user._id)
 
     res.status(200).json({ user })
