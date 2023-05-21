@@ -22,29 +22,29 @@ const getAllReports = async (req, res) => {
         if(search) {
             queryObject.title = { $regex: search, $options: 'i' }
         }
-
-        if(category){
+    
+        if(category && category !== 'all'){
             queryObject.category = category
         }
     
-        if(status){
+        if(status && status !== 'all'){
             queryObject.status = status
         }
-
+    
         result = Report.find(queryObject)
-
+    
         if(sort === 'latest'){
             result = result.sort('-createdAt')
         }
-
+    
         if(sort === 'oldest'){
             result = result.sort('createdAt')
         }
-
+    
         if(sort === 'a-z'){
             result = result.sort('title')
         }
-
+    
         if(sort === 'z-a'){
             result = result.sort('-title')
         }
