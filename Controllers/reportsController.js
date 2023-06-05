@@ -1,334 +1,397 @@
-const Report = require('../Models/reportModel')
-const CustomErrors = require('../Errors')
-const moment = require('moment')
-const cloudinary = require('cloudinary').v2
-const fs = require('fs')
-const checkPermissions = require('../Utils/checkPermissons')
+const Report = require("../Models/reportModel");
+const CustomErrors = require("../Errors");
+const moment = require("moment");
+const cloudinary = require("cloudinary").v2;
+const fs = require("fs");
+const checkPermissions = require("../Utils/checkPermissons");
 
 const getAllReports = async (req, res) => {
-    const { search, sort, category, status } = req.query
+  const { search, sort, category, status } = req.query;
 
-    let report
-    let result
-    let queryObject = {}
+  let report;
+  let result;
+  let queryObject = {};
 
-    if(!req.user.verified) throw new CustomErrors.UnauthenticatedError('User is not verified yet!')
+  if (!req.user.verified)
+    throw new CustomErrors.UnauthenticatedError("User is not verified yet!");
 
-    if(req.user.userType === 'civilian'){
-        queryObject = {
-            createdBy: req.user.userId
-        }
+  if (req.user.userType === "civilian") {
+    queryObject = {
+      createdBy: req.user.userId,
+    };
 
-        if(search) {
-            queryObject.title = { $regex: search, $options: 'i' }
-        }
-    
-        if(category && category !== 'all'){
-            queryObject.category = category
-        }
-    
-        if(status && status !== 'all'){
-            queryObject.status = status
-        }
-    
-        result = Report.find(queryObject)
-    
-        if(sort === 'latest'){
-            result = result.sort('-createdAt')
-        }
-    
-        if(sort === 'oldest'){
-            result = result.sort('createdAt')
-        }
-    
-        if(sort === 'a-z'){
-            result = result.sort('title')
-        }
-    
-        if(sort === 'z-a'){
-            result = result.sort('-title')
-        }
-
-        const page = req.query.page || 1
-        const limit = 10
-        const skip = (page - 1) * limit
-        
-        result = result.skip(skip).limit(limit)
-
-        report = await result
-        
-        if(!report.length > 0){
-            throw new CustomErrors.NotFoundError('No reports found')
-        }
-
-        const totalReports = await Report.countDocuments(queryObject)
-        const numOfPages = Math.ceil(totalReports/limit)
-
-        return res.status(200).json({ reports: report.map(item => {
-            const { title, category, status, media, location, description, _id } = item
-            return { title, category, status, media, location, description, _id }
-        }), count: report.length, page, totalReports, numOfPages })
+    if (search) {
+      queryObject.title = { $regex: search, $options: "i" };
     }
 
-    if(search) {
-        queryObject.title = { $regex: search, $options: 'i' }
+    if (category && category !== "all") {
+      queryObject.category = category;
     }
 
-    if(category && category !== 'all'){
-        queryObject.category = category
+    if (status && status !== "all") {
+      queryObject.status = status;
     }
 
-    if(status && status !== 'all'){
-        queryObject.status = status
+    result = Report.find(queryObject);
+
+    if (sort === "latest") {
+      result = result.sort("-createdAt");
     }
 
-    result = Report.find(queryObject)
-
-    if(sort === 'latest'){
-        result = result.sort('-createdAt')
+    if (sort === "oldest") {
+      result = result.sort("createdAt");
     }
 
-    if(sort === 'oldest'){
-        result = result.sort('createdAt')
+    if (sort === "a-z") {
+      result = result.sort("title");
     }
 
-    if(sort === 'a-z'){
-        result = result.sort('title')
+    if (sort === "z-a") {
+      result = result.sort("-title");
     }
 
-    if(sort === 'z-a'){
-        result = result.sort('-title')
+    const page = req.query.page || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+
+    result = result.skip(skip).limit(limit);
+
+    report = await result;
+
+    if (!report.length > 0) {
+      throw new CustomErrors.NotFoundError("No reports found");
     }
 
-    const page = Number(req.query.page) || 1
-    const limit = 10
-    const skip = (page - 1) * limit
-    
-    result = result.skip(skip).limit(limit)
+    const totalReports = await Report.countDocuments(queryObject);
+    const numOfPages = Math.ceil(totalReports / limit);
 
-    report = await result
+    return res.status(200).json({
+      reports: report.map((item) => {
+        const { title, category, status, media, location, description, _id } =
+          item;
+        return { title, category, status, media, location, description, _id };
+      }),
+      count: report.length,
+      page,
+      totalReports,
+      numOfPages,
+    });
+  }
 
-    if(!report.length > 0){
-        throw new CustomErrors.NotFoundError('No reports found')
-    }
+  if (search) {
+    queryObject.title = { $regex: search, $options: "i" };
+  }
 
-    const totalReports = await Report.countDocuments(queryObject)
-    const numOfPages = Math.ceil(totalReports/limit)
-    res.status(200).json({ reports: report.map(item => {
-        const { title, category, status, media, location, description, _id } = item
-            return { title, category, status, media, location, description, _id }
-    }), count: report.length, page, totalReports, numOfPages })
-}
+  if (category && category !== "all") {
+    queryObject.category = category;
+  }
+
+  if (status && status !== "all") {
+    queryObject.status = status;
+  }
+
+  result = Report.find(queryObject);
+
+  if (sort === "latest") {
+    result = result.sort("-createdAt");
+  }
+
+  if (sort === "oldest") {
+    result = result.sort("createdAt");
+  }
+
+  if (sort === "a-z") {
+    result = result.sort("title");
+  }
+
+  if (sort === "z-a") {
+    result = result.sort("-title");
+  }
+
+  const page = Number(req.query.page) || 1;
+  const limit = 10;
+  const skip = (page - 1) * limit;
+
+  result = result.skip(skip).limit(limit);
+
+  report = await result;
+
+  if (!report.length > 0) {
+    throw new CustomErrors.NotFoundError("No reports found");
+  }
+
+  const totalReports = await Report.countDocuments(queryObject);
+  const numOfPages = Math.ceil(totalReports / limit);
+  res.status(200).json({
+    reports: report.map((item) => {
+      const { title, category, status, media, location, description, _id } =
+        item;
+      return { title, category, status, media, location, description, _id };
+    }),
+    count: report.length,
+    page,
+    totalReports,
+    numOfPages,
+  });
+};
 
 const createReport = async (req, res) => {
-    if(req.user.userType === 'officer') throw new CustomErrors.UnauthenticatedError(`Police officers cannot create a report`);
-    const { location, description, category } = req.body
+  if (req.user.userType === "officer")
+    throw new CustomErrors.UnauthenticatedError(
+      `Police officers cannot create a report`
+    );
+  const { location, description, category } = req.body;
 
-    if( !location || !description || !category ) {
-        throw new CustomErrors.BadRequestError("Please provide all neccessary values")
-    }
+  if (!location || !description || !category) {
+    throw new CustomErrors.BadRequestError(
+      "Please provide all neccessary values"
+    );
+  }
 
-    req.body.createdBy = req.user.userId
-    req.body.status = 'pending'
+  req.body.createdBy = req.user.userId;
+  req.body.status = "pending";
 
-    const report = await Report.create(req.body)
+  const report = await Report.create(req.body);
 
-    res.status(201).json({ 
-        title: report.title, 
-        category: report.category, 
-        status: report.status, 
-        media: report.media, 
-        location: report.location, 
-        description: report.description 
-    })
-}
+  res.status(201).json({
+    title: report.title,
+    category: report.category,
+    status: report.status,
+    media: report.media,
+    location: report.location,
+    description: report.description,
+  });
+};
 
-const deleteReport = async ( req, res ) => {
+const deleteReport = async (req, res) => {
+  const report = await Report.findOne({ _id: req.params.id });
 
-    const report = await Report.findOne({_id: req.params.id})
+  if (!report) {
+    throw new CustomErrors.NotFoundError(
+      `No report was found with that ${req.params.id}`
+    );
+  }
 
-    if(!report){
-        throw new CustomErrors.NotFoundError(`No report was found with that ${req.params.id}`)
-    }
+  await report.deleteOne();
 
-    await report.deleteOne()
-
-    res.status(200).json({ msg: 'Report deleted successfully!'})
-}
+  res.status(200).json({ msg: "Report deleted successfully!" });
+};
 
 const updateReport = async (req, res) => {
-    const { title, location, category, description, media } = req.body
+  const { title, location, category, description, media } = req.body;
 
-    const report = await Report.findOne({_id: req.params.id})
+  const report = await Report.findOne({ _id: req.params.id });
 
-    if(!report){
-        throw new CustomErrors.NotFoundError(`No report was found with that ${req.params.id}`)
-    }
+  if (!report) {
+    throw new CustomErrors.NotFoundError(
+      `No report was found with that ${req.params.id}`
+    );
+  }
 
-    checkPermissions(req.user, report.createdBy)
+  checkPermissions(req.user, report.createdBy);
 
-    if(report.status === 'responded') throw new CustomErrors.Forbidden('Report has already been attended to!')
+  if (report.status === "responded")
+    throw new CustomErrors.Forbidden("Report has already been attended to!");
 
-    await report.updateOne({ title, location, category, description, media }, { new: true, runValidators: true})
+  await report.updateOne(
+    { title, location, category, description, media },
+    { new: true, runValidators: true }
+  );
 
-    return res.status(200).json({ report })
-}
+  return res.status(200).json({ report });
+};
 
 const updateReponse = async (req, res) => {
-    const { response, status } = req.body
+  const { response, status } = req.body;
 
-    const report = await Report.findOne({_id: req.params.id})
+  const report = await Report.findOne({ _id: req.params.id });
 
-    if(!report){
-        throw new CustomErrors.NotFoundError(`No report was found with that ${req.params.id}`)
-    }
+  if (!report) {
+    throw new CustomErrors.NotFoundError(
+      `No report was found with that ${req.params.id}`
+    );
+  }
 
-    if(status === 'active' && !response) throw new CustomErrors.BadRequestError('Please provide a the response information')
+  if (status === "active" && !response)
+    throw new CustomErrors.BadRequestError(
+      "Please provide a the response information"
+    );
 
-    checkPermissions(req.user, report.createdBy)
+  checkPermissions(req.user, report.createdBy);
 
-    if(report.status === 'responded') throw new CustomErrors.Forbidden('Report has already been attended to!')
+  if (report.status === "responded")
+    throw new CustomErrors.Forbidden("Report has already been attended to!");
 
-    if(response && !report.response) {
-        req.body.status = 'active'
-        req.body.response = response
-    }
+  if (response && !report.response) {
+    req.body.status = "active";
+    req.body.response = response;
+  }
 
-    if(report.response){
-        req.body.response = report.response
-    }
+  if (report.response) {
+    req.body.response = report.response;
+  }
 
-    await report.updateOne({ response: req.body.response , status: req.body.status }, { new: true, runValidators: true})
+  await report.updateOne(
+    { response: req.body.response, status: req.body.status },
+    { new: true, runValidators: true }
+  );
 
-    return res.status(200).json({ report })
-}
+  return res.status(200).json({ report });
+};
 
 const getReport = async (req, res) => {
+  if (!req.user.verified)
+    throw new CustomErrors.UnauthenticatedError("User is not verified yet!");
+  const report = await Report.findOne({ _id: req.params.id }).populate({
+    path: "createdBy",
+    select: "firstName lastName contact",
+  });
 
-    if(!req.user.verified) throw new CustomErrors.UnauthenticatedError('User is not verified yet!')
-    const report = await Report.findOne({_id: req.params.id}).populate({path: 'createdBy', select: 'firstName lastName contact'})
+  if (!report) {
+    throw new CustomErrors.NotFoundError("No reports found");
+  }
 
-    if(!report) {
-        throw new CustomErrors.NotFoundError('No reports found')
-    }
+  if (req.user.userType === "civilian")
+    checkPermissions(req.user, report.createdBy._id);
 
-    if(req.user.userType === 'civilian') checkPermissions(req.user, report.createdBy._id)
-
-    // const { title, category, status, media, location, description, _id } = report
-    return res.status(200).json({ report })
-}
+  // const { title, category, status, media, location, description, _id } = report
+  return res.status(200).json({ report });
+};
 
 const getStats = async (req, res) => {
-    // if(req.user.userType === 'Civilian'){
-    //     let stats = await Report.aggregate([
-    //         {$match: {$createdBy: mongoose.Types.ObjectId(req.user.userId)}},
-    //         {$group: {_id: '$status', count: {$sum: 1}}}
-    //     ])
+  // if(req.user.userType === 'Civilian'){
+  //     let stats = await Report.aggregate([
+  //         {$match: {$createdBy: mongoose.Types.ObjectId(req.user.userId)}},
+  //         {$group: {_id: '$status', count: {$sum: 1}}}
+  //     ])
 
-    //     stats = stats.reduce((arr, curr) => {
-    //         const { _id: status, count } = curr
-    //         acc[status] = count
-    //         return acc
-    //     }, {})
+  //     stats = stats.reduce((arr, curr) => {
+  //         const { _id: status, count } = curr
+  //         acc[status] = count
+  //         return acc
+  //     }, {})
 
-    //     const defaultStats = {
-    //         Pending: stats.pending || 0,
-    //         Active: stats.active || 0,
-    //         Responded: stats.responded || 0
-    //     }
+  //     const defaultStats = {
+  //         Pending: stats.pending || 0,
+  //         Active: stats.active || 0,
+  //         Responded: stats.responded || 0
+  //     }
 
-    //     let monthlyApplications = await Report.aggregate([
-    //         {$match: { $createdBy: mongoose.Types.ObjectId(req.user.userId)}},
-    //         {$group: {_id: {year: {$year: '$createdAt'}, month: {$month: '$createdAt'}}, count: {$sum: 1}}},
-    //         {$sort: { '_id.Year': -1, '_id.Month': -1}},
-    //         {$limit: 6}
-    //     ])
+  //     let monthlyApplications = await Report.aggregate([
+  //         {$match: { $createdBy: mongoose.Types.ObjectId(req.user.userId)}},
+  //         {$group: {_id: {year: {$year: '$createdAt'}, month: {$month: '$createdAt'}}, count: {$sum: 1}}},
+  //         {$sort: { '_id.Year': -1, '_id.Month': -1}},
+  //         {$limit: 6}
+  //     ])
 
-    //     monthlyApplications = monthlyApplications.map(item => {
-    //         const {_id: {year, month}, count} = item
-    //         const date = moment()
-    //         .month(month - 1)
-    //         .year(year)
-    //         .format('MMM Y')
+  //     monthlyApplications = monthlyApplications.map(item => {
+  //         const {_id: {year, month}, count} = item
+  //         const date = moment()
+  //         .month(month - 1)
+  //         .year(year)
+  //         .format('MMM Y')
 
-    //         return {date, count}
-    //     }).reverse()
+  //         return {date, count}
+  //     }).reverse()
 
-    //     return res.status(200).json({ defaultStats, monthlyApplications })
-    // }
+  //     return res.status(200).json({ defaultStats, monthlyApplications })
+  // }
 
-    if(!req.user.verified) throw new CustomErrors.UnauthenticatedError('User is not verified yet!')
-    
-    let stats = await Report.aggregate([
-        {$match: {}},
-        {$group: {_id: '$status', count: {$sum: 1}} }
-    ])
+  if (!req.user.verified)
+    throw new CustomErrors.UnauthenticatedError("User is not verified yet!");
 
-    stats = stats.reduce((acc, curr) => {
-        const { _id: status, count } = curr
-        acc[status] = count
-        return acc
-    }, {})
+  let stats = await Report.aggregate([
+    { $match: {} },
+    { $group: { _id: "$status", count: { $sum: 1 } } },
+  ]);
 
-    const defaultStats = {
-        pending: stats.pending || 0,
-        active: stats.active || 0,
-        responded: stats.responded || 0
-    }
+  stats = stats.reduce((acc, curr) => {
+    const { _id: status, count } = curr;
+    acc[status] = count;
+    return acc;
+  }, {});
 
-    let monthlyApplications = await Report.aggregate([
-        {$match: {}},
-        {$group: {_id: {year: {$year: '$createdAt'}, month: {$month: '$createdAt'}}, count: {$sum: 1}}},
-        {$sort: {'_id.year': -1, '_id.month': -1}},
-        {$limit: 6}
-    ])
+  const defaultStats = {
+    pending: stats.pending || 0,
+    active: stats.active || 0,
+    responded: stats.responded || 0,
+  };
 
-    monthlyApplications = monthlyApplications.map(item => {
-        const { _id: {year, month}, count } = item
-        const date = moment()
+  let monthlyApplications = await Report.aggregate([
+    { $match: {} },
+    {
+      $group: {
+        _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { "_id.year": -1, "_id.month": -1 } },
+    { $limit: 6 },
+  ]);
+
+  monthlyApplications = monthlyApplications
+    .map((item) => {
+      const {
+        _id: { year, month },
+        count,
+      } = item;
+      const date = moment()
         .month(month - 1)
         .year(year)
-        .format('MMM Y')
+        .format("MMM Y");
 
-        return { date, count }
-    }).reverse()
+      return { date, count };
+    })
+    .reverse();
 
-    res.status(200).json({ defaultStats, monthlyApplications })
-}
+  res.status(200).json({ defaultStats, monthlyApplications });
+};
 
 const uploadFile = async (req, res) => {
-    
-    const {image, video} = req.files
+  const { image, video } = req.files;
 
-    if(image) {
-        if(!image.mimetype.startsWith('image')) {
-            throw new CustomErrors.BadRequestError('Please upload a video or an image')
-        }
-    
-        const result = await cloudinary.uploader.upload(image.tempFilePath, {
-            use_filename: true,
-            folder: 'file uploads'
-        })
-    
-        fs.unlinkSync(image.tempFilePath)
-    
-        return res.status(200).json({ src: result.secure_url })
+  if (image) {
+    if (!image.mimetype.startsWith("image")) {
+      throw new CustomErrors.BadRequestError(
+        "Please upload a video or an image"
+      );
     }
 
-    if(video) {
-        if(!video.mimetype.startsWith('image')) {
-            throw new CustomErrors.BadRequestError('Please upload a video or an image')
-        }
-    
-        const result = await cloudinary.uploader.upload(video.tempFilePath, {
-            use_filename: true,
-            folder: 'file uploads'
-        })
-    
-        fs.unlinkSync(video.tempFilePath)
-    
-        return res.status(200).json({ src: result.secure_url })
-    }
-}
+    const result = await cloudinary.uploader.upload(image.tempFilePath, {
+      use_filename: true,
+      folder: "file uploads",
+    });
 
-module.exports = { getAllReports, deleteReport, updateReport, getReport, getStats, createReport, uploadFile, updateReponse }
+    fs.unlinkSync(image.tempFilePath);
+
+    return res.status(200).json({ src: result.secure_url });
+  }
+
+  if (video) {
+    if (!video.mimetype.startsWith("image")) {
+      throw new CustomErrors.BadRequestError(
+        "Please upload a video or an image"
+      );
+    }
+
+    const result = await cloudinary.uploader.upload(video.tempFilePath, {
+      use_filename: true,
+      folder: "file uploads",
+    });
+
+    fs.unlinkSync(video.tempFilePath);
+
+    return res.status(200).json({ src: result.secure_url });
+  }
+};
+
+module.exports = {
+  getAllReports,
+  deleteReport,
+  updateReport,
+  getReport,
+  getStats,
+  createReport,
+  uploadFile,
+  updateReponse,
+};
